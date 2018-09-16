@@ -6,6 +6,8 @@
     <title>@ViewBag.Title - My ASP.NET Application</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    <!--Modernizr needed at top, beecause happenns before html appear-->
+    <!--Render minified bundle, combines files together...then they're rendered into html via the script-->
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -20,9 +22,12 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Login", "Login", "Logon")</li>
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                    <li>@Html.ActionLink("Data", "Index", "Data")</li>
+                    <li>@Html.ActionLink("EFData", "Index", "EFData")</li>
+                    <li>@Html.ActionLink("AJAX", "Index", "AJAX")</li>
+                    <li>@Html.ActionLink("Infrastructure", "Index", "Infrastructure")</li>
                 </ul>
             </div>
         </div>
@@ -35,6 +40,7 @@
         </footer>
     </div>
 
+    <!--Can perform better by having scripts at bottom, more html to client then loads at end-->
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)

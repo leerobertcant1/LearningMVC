@@ -1,0 +1,21 @@
+﻿@model IEnumerable<LearningMVC.Models.Person>
+
+@{
+    ViewBag.Title = "AJAXBegin";
+}
+
+<h2>AJAXBegin</h2>
+
+
+@using (Ajax.BeginForm(new AjaxOptions
+{
+    HttpMethod = "Get",
+    InsertionMode = InsertionMode.Replace,
+    UpdateTargetId = "personList"
+}))
+{
+    <input type="search" name="searchTerm"  />
+    <input type="submit" name="Search by name" />
+}
+
+@Html.Partial("~/Views/Shared/_ajax.cshtml", Model)

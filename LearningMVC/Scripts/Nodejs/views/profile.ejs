@@ -1,0 +1,23 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Html</title>
+	<link href="/views/Styles/style.css" rel="stylesheet"/>
+</head>
+<body> 
+<% include partials/nav.ejs%> <!--Partial views --->
+    <H1>Profile</H1>
+	<p>
+	<!--EJS uses the <% %> equals sign only needed when outputting data--->
+
+		The id is: <%= id %>
+		The person is: <%= person.name%> and their age is: <%=person.age%>
+		Their age category is: 
+			<% var category = ""; %>
+			<% if (person.age > 18) {category = "adult";} else { %>
+			<% category = "child";} %>
+			<%= category %>
+	</p>
+</body>
+</html>
