@@ -1,10 +1,13 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using LearningMVC.Controllers;
 using LearningMVC.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
+using Rhino.Mocks;
+using FluentAssertions;
+using LearningMVC.Services;
+using LearningMVC.Data;
 
 //End To end - entire system
 //Integration, database ad UI
@@ -14,6 +17,13 @@ namespace LearningMVC.Tests.Controllers
     [TestClass]
     public class HomeControllerTests
     {
+        private TestController _testController;
+
+        public HomeControllerTests()
+        {
+            _testController = new TestController();
+        }
+
         [TestMethod]
         public void Text_LeeCant_NameLeeCant()
         {
@@ -40,16 +50,6 @@ namespace LearningMVC.Tests.Controllers
             string useless = "five_";
         }
 
-        [TestMethod]
-         public void Sql_GetsRecords_RecordsReturned()
-        {
-            var _db = new Mock<LearningDB>();
-
-            var model = _db.Object.People;
-                                                                                                                                                                                             
-            Assert.IsNotNull(model);
-        }
-          
         [TestMethod]//Output verification / Functional - Maths only. 
                     //Try to use the most
         public void Add_1and2_3()
@@ -57,9 +57,9 @@ namespace LearningMVC.Tests.Controllers
             int a = 1;
             int b = 2;
 
-             int result = a + b;
+            int result = a + b;
 
-             Assert.AreEqual(3, result);
+            Assert.AreEqual(3, result);
         }
 
         [TestMethod]//Verifies the state of this list. False positives could happen.
@@ -72,38 +72,6 @@ namespace LearningMVC.Tests.Controllers
             Assert.AreEqual(1, list.Count);
         }
 
-        [TestMethod]//Collaborator test, needs to happen in order
-        public void SqlSaveToDb_RandomPerson_Saved()
-        {
-            Person person = new Person();
-            var _db = new Mock<LearningDB>();
-
-            person.Id = Guid.NewGuid();
-            person.FirstName = "Unit Test";
-            person.LastName = "Unit test";
-
-            _db.Object.People = new LearningDB().People;
-            _db.Object.People.Add(person);
-            _db.Object.SaveChanges();
-
-            Person model = _db.Object.People.Find(person.Id);
-
-            Assert.AreEqual(model.Id, person.Id);
-        }
-
-        [TestMethod]
-        public void GetText_AnyString_TextReturned()
-        {
-            var controller = new TestController();
-            var mock = new Mock<TestController>();
-
-            controller.ReturnEmptyString("");
-            mock.Setup(x => x.ReturnEmptyString(It.IsAny<string>())).Returns((string x) => "value");
-            string result = mock.Object.ReturnEmptyString();
-                                         
-            Assert.IsTrue(result.Length > 0);
-        }
-
         [TestMethod]
         public void GetText_Null_NullValue()
         {
@@ -113,6 +81,89 @@ namespace LearningMVC.Tests.Controllers
 
             Assert.IsNull(text);
         }
+
+        //Rhinomocks stuff below
+        public class HandRolled
+        {
+            private string _setter;
+
+            public HandRolled(string setter)
+            {
+                _setter = setter;
+            }
+
+            public string GetSetter()
+            {
+                return _setter;
+            }
+        }
+
+        //Creates an instance that can ve re-used, where construct the classes manually.
+        [TestMethod]
+        public void RhinoMocks_HandrolledMockObject_Set_Data_Should_Match()
+        {
+            //Arrange
+            var setData = "SetData";
+            var handRolled = new HandRolled(setData);
+
+            //Act
+            var returnedValue = handRolled.GetSetter();
+
+            //Assert
+            returnedValue.Should().Be(setData);
+        }
+
+        //Very useful for DI stuff to check when functions are hit.
+        //Need to Mock out an interface when doing this.
+        [TestMethod]
+        public void RhinoMocks_Mock_Object_Checking_Injected_Function_Call()
+        {
+            //Not an instance of the class, this is used when injected.
+            var dependencyInjectorServiceMock = MockRepository.GenerateMock<IDependencyInjectorService>();
+
+            var diRepository = new DI_Repostitory(dependencyInjectorServiceMock);
+
+            var data = diRepository.GetData();
+
+            dependencyInjectorServiceMock.AssertWasCalled( x=> x.DependencyInjectionTest());
+            dependencyInjectorServiceMock.VerifyAllExpectations();
+        }
+
+        //Useful with UIs for when views set
+        [TestMethod]
+        public void RhinoMocks_Mock_Object_Checking_Injected_Attribute_Set()
+        {
+            //Not an instance of the class, this is used when injected.
+            var dependencyInjectorServiceMock = MockRepository.GenerateMock<IDependencyInjectorService>();
+
+            var diRepository = new DI_Repostitory(dependencyInjectorServiceMock);
+
+            var setData = true;
+
+            diRepository.SetData(setData);
+
+            dependencyInjectorServiceMock.AssertWasCalled(x => x.DependencyInjectionAttributeTest(setData));
+            dependencyInjectorServiceMock.VerifyAllExpectations();
+        }
+
+        //Stub tells actions what to return.
+        //Mock just listens out encase it is called.
+        [TestMethod]
+        public void RhinoMocks_Stub_Data_Should_Be_()
+        {
+            //Arrange
+            var dependencyInjectorServiceMock = MockRepository.GenerateMock<IDependencyInjectorService>();
+            dependencyInjectorServiceMock.Stub( x => x.DependencyInjectionTest()).Return("Data");
+
+            var diRepository = new DI_Repostitory(dependencyInjectorServiceMock);
+
+            //Act
+            var data = diRepository.GetData();
+
+            //Assert
+            data.Should().Be("Data");
+        }
+
     } 
 }
 
