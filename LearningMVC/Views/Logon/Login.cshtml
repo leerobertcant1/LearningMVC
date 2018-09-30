@@ -1,0 +1,33 @@
+﻿@model LearningMVC.Models.Users
+
+@{
+    /**/
+
+    ViewBag.Title = "Login";
+}
+
+<h2>Login</h2><br />
+
+@using (Html.BeginForm("Login", "Logon", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()<!--Generated here, malicious users cannot see this behinnd when inspecting the page-->
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Username, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => model.Username)
+            @Html.ValidationMessageFor(model => model.Username)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => model.Password)
+            @Html.ValidationMessageFor(model => model.Password)
+            <button type="submit">Submit</button>
+        </div>
+    </div>
+}
+
+@ViewBag.LoggedIn

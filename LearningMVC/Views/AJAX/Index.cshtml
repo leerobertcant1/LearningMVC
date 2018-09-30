@@ -1,0 +1,67 @@
+﻿@using PagedList.Mvc
+@model  PagedList.IPagedList<LearningMVC.Models.Person>
+
+
+@{
+    ViewBag.Title = "AJAX";
+}
+
+<h2>AJAX</h2>
+
+<b>Search by Surname:</b>
+
+<!--Asynchronous-->
+@using (Ajax.BeginForm("Index", new AjaxOptions
+{
+    HttpMethod = "Get",
+    InsertionMode = InsertionMode.Replace,
+    UpdateTargetId = "personList"
+}))
+{
+    <input type="search" name="term" data-me-autocomplete="@Url.Action("Index", "AutoComplete")" />
+    <input type="submit" name="Search by name" />
+}
+
+<!--Synchronous-->
+@using (Html.BeginForm())
+{
+    <center>
+        <h2>Student Details</h2>
+        <div class="table-responsive">
+            <table class="table table-striped" id="personList">
+                <thead class="thead-light">
+                    <tr>
+                        <th> @Html.Label("FirstName")</th>
+                        <th>@Html.Label("LastName")</th>
+                        <th>@Html.Label("Age")</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < Model.Count; i++)
+                    {
+                        <tr>
+                            <td>@Model[i].FirstName</td>
+                            <td>@Model[i].LastName</td>
+                            <td>@Model[i].Age</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </center>
+
+    <div id="container">
+        <div class="pagination">
+            Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+            @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+        </div>
+    </div>
+}
+
+    <div id="personList2">
+        <div class="pagedList" data-me-target="#personList2">
+            @Html.PagedListPager(Model, page => Url.Action("Index", new { page }), PagedListRenderOptions.MinimalWithItemCountText)
+        </div>
+
+        @Html.Partial("~/Views/Shared/_ajax.cshtml", Model)
+    </div>

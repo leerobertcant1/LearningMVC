@@ -11,12 +11,14 @@ namespace LearningMVC.Controllers
     {
         public ActionResult Index()
         {
+            SetUrlData();
+
             return View();
         }
-
+    
         public ActionResult About()
         {
-            AboutModel model = new AboutModel();
+            About model = new About();
             model.Name = "Lee Cant";
             model.Location = "Lincoln, UK";
 
@@ -28,6 +30,18 @@ namespace LearningMVC.Controllers
             ViewBag.Message = "Your contact page.";
 
             return View();
+        }
+
+        private void SetUrlData()
+        {
+            //Getting url information
+            var controller = RouteData.Values["controller"];
+            var action = RouteData.Values["action"];
+            var id = RouteData.Values["id"];
+
+            string url = $"The controller is {controller}; the action is {action}; the id is: {id}";
+
+            ViewBag.UrlData = url;
         }
     }
 }

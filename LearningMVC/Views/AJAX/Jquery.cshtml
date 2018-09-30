@@ -1,0 +1,22 @@
+﻿@model IEnumerable<LearningMVC.Models.Person>
+
+@{
+    ViewBag.Title = "Jquery";
+}
+
+<h2>Jquery</h2>
+
+<form method="get" action="@Url.Action("Jquery")"
+      data-me-ajax="true" data-me-target="#personList">
+
+    <!--Wire up Autocomplete here, tells the textbox to call it-->
+    <input type="search" name="term" data-me-autocomplete="@Url.Action("AutoComplete")"/>
+    <input type="submit" name="Search by name" />
+</form>
+
+<div id="personList">
+
+  
+</div>
+
+

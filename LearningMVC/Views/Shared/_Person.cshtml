@@ -1,0 +1,15 @@
+﻿@model LearningMVC.Models.Person
+
+<tr>
+    <td>
+         @Model.FirstName
+    </td>
+    <td>
+       @Model.LastName
+    </td>
+    <td>
+        <span class="right">
+            @Html.ActionLink("Edit", "Edit", new { id = @Model.Id })
+        </span>
+    </td>
+</tr>

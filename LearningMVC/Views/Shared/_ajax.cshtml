@@ -1,0 +1,12 @@
+﻿@model IEnumerable<LearningMVC.Models.Person>
+
+<div id="personList">
+    @foreach (var item in Model)
+    {
+        <div>
+            <div> @item.FirstName</div>
+            <div> @item.LastName</div>
+            <div> @item.Age</div>
+        </div>
+    }
+</div>

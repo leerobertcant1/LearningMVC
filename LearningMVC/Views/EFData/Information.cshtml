@@ -1,0 +1,13 @@
+﻿@model IEnumerable<LearningMVC.Models.Person>
+@{
+    ViewBag.Title = "Information";
+}
+
+<h2>Information on people</h2>
+
+@Html.Partial("InfoPartial")
+
+<p>
+    @Html.ActionLink("Create New", "Create", @Model)
+</p>
+
