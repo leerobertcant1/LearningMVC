@@ -15,5 +15,10 @@ namespace LearningMVC.Data
                 new Food { Id = 3, Description = "Chocolate", Measure = new Measure {Id = 3,Total = 20, Unit = "g" } }
             };
         }
+
+        public void SaveData(IEnumerable<Food> foods)
+        {
+            //Do nothing
+        }
     }
 }

@@ -6,5 +6,6 @@ namespace LearningMVC.Data
     public interface IFoodRepository
     {
         IEnumerable<Food> GetFoods();
+        void SaveData(IEnumerable<Food> foods);
     }
 }

@@ -6,5 +6,10 @@
         {
             return "Dependency Injector test";
         }
+
+        public void DependencyInjectionAttributeTest(bool set)
+        {
+            set = true;
+        }
     }
 }
